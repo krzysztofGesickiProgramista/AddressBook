@@ -1,0 +1,5 @@
+*.cbp
+*.layout
+bin
+obj
+addressBook.txt
