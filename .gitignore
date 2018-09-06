@@ -1,5 +1,5 @@
 *.cbp
 *.layout
-bin
-obj
+bin/
+obj/
 addressBook.txt
