@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <windows.h>
+#include <vector>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ struct Contact {
     string name, surname, phoneNumber, email, address;
 };
 
-void showContacts(int _contactsNumber, Contact _contacts[]) {
+void showContacts(int _contactsNumber, vector <Contact> _contacts) {
     cout << "Lista zapisanych kontaktow: " << endl << endl;
 
     for (int i = 0; i < _contactsNumber; i++) {
@@ -23,16 +24,18 @@ void showContacts(int _contactsNumber, Contact _contacts[]) {
         cout << "Adres: " << _contacts[i].address << endl;
         cout << endl;
     }
-    cout << "(wcisnij enter aby wrocic do menu glownego)";
+    cout << endl << "(wcisnij enter aby wrocic do menu glownego)";
     cin.sync();
     cin.get();
 }
 
-int addNewContact(int _contactsNumber, Contact _contacts[]) {
+int addNewContact(int _contactsNumber, vector <Contact> _contacts) {
     //dodanie nowego kontaktu do tablicy
     cin.ignore();
+    _contacts.push_back(Contact());
+    if (_contactsNumber == 0) _contacts[_contactsNumber].id = _contactsNumber+1;
+    else _contacts[_contactsNumber].id = (_contacts[_contactsNumber-1].id+1);
     cout << "Podaj imie: ";
-    _contacts[_contactsNumber].id = (_contactsNumber+1);
     getline(cin, _contacts[_contactsNumber].name);
     cout << endl << "Podaj nazwisko: ";
     getline(cin, _contacts[_contactsNumber].surname);
@@ -65,7 +68,7 @@ int addNewContact(int _contactsNumber, Contact _contacts[]) {
     return _contactsNumber+1;
 }
 
-void searchContactByName(int _contactsNumber, Contact _contacts[]) {
+void searchContactByName(int _contactsNumber, vector <Contact> _contacts) {
     string searchFor;
     cout << "Podaj szukana fraze (imie): ";
     cin.ignore();
@@ -81,12 +84,12 @@ void searchContactByName(int _contactsNumber, Contact _contacts[]) {
             cout << endl;
         }
     }
-    cout << "(wcisnij enter aby wrocic do menu glownego)";
+    cout << endl << "(wcisnij enter aby wrocic do menu glownego)";
     cin.sync();
     cin.get();
 }
 
-void searchContactBySurname(int _contactsNumber, Contact _contacts[]) {
+void searchContactBySurname(int _contactsNumber, vector <Contact> _contacts) {
     string searchFor;
     cout << "Podaj szukana fraze (nazwisko): ";
     cin.ignore();
@@ -102,12 +105,12 @@ void searchContactBySurname(int _contactsNumber, Contact _contacts[]) {
             cout << endl;
         }
     }
-    cout << "(wcisnij enter aby wrocic do menu glownego)";
+    cout << endl << "(wcisnij enter aby wrocic do menu glownego)";
     cin.sync();
     cin.get();
 }
 
-int loadTextFile(Contact _contacts[]) {
+int loadTextFile(vector <Contact> _contacts) {
     fstream textFile;
     string textLine;
     textFile.open(fileName.c_str(), ios::in);
@@ -116,10 +119,11 @@ int loadTextFile(Contact _contacts[]) {
         Sleep(2000);
         exit(0);
     }
-    int contactsNumber=0;
-    int numberOfLine=1;
+    int contactsNumber = 0;
+    int numberOfLine = 1;
     //teraz wczytujemy z pliku do tablicy
     while (getline(textFile,textLine)) {
+        _contacts.push_back(Contact());
         switch (numberOfLine) {
         case 1:
             _contacts[contactsNumber].id = atoi(textLine.c_str());
@@ -164,9 +168,16 @@ void showMenu () {
 
 int main() {
     char selection;
-    Contact contacts[1000]; //tutaj zrobic vector
+    vector <Contact> contacts;
+    //Contact contacts[1000]; //tutaj zrobic vector
     int contactsNumber = loadTextFile(contacts);
 
+    for (int i = 0; i < contactsNumber; i++)
+    {
+        cout << contacts[i].id << endl;
+    }
+
+    /*
     //MENU GLOWNE
     while (true) {
 
@@ -212,5 +223,6 @@ int main() {
             system("pause");
         }
     }
+    */
     return 0;
 }
