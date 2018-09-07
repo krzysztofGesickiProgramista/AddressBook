@@ -12,7 +12,6 @@ struct Contact {
 };
 
 void showContacts(int _contactsNumber, Contact _contacts[]) {
-    system("cls");
     cout << "Lista zapisanych kontaktow: " << endl << endl;
 
     for (int i = 0; i < _contactsNumber; i++) {
@@ -24,6 +23,9 @@ void showContacts(int _contactsNumber, Contact _contacts[]) {
         cout << "Adres: " << _contacts[i].address << endl;
         cout << endl;
     }
+    cout << "(wcisnij enter aby wrocic do menu glownego)";
+    cin.sync();
+    cin.get();
 }
 
 int addNewContact(int _contactsNumber, Contact _contacts[]) {
@@ -65,7 +67,6 @@ int addNewContact(int _contactsNumber, Contact _contacts[]) {
 
 void searchContactByName(int _contactsNumber, Contact _contacts[]) {
     string searchFor;
-    system("cls");
     cout << "Podaj szukana fraze (imie): ";
     cin.ignore();
     getline(cin, searchFor);
@@ -80,11 +81,13 @@ void searchContactByName(int _contactsNumber, Contact _contacts[]) {
             cout << endl;
         }
     }
+    cout << "(wcisnij enter aby wrocic do menu glownego)";
+    cin.sync();
+    cin.get();
 }
 
 void searchContactBySurname(int _contactsNumber, Contact _contacts[]) {
     string searchFor;
-    system("cls");
     cout << "Podaj szukana fraze (nazwisko): ";
     cin.ignore();
     getline(cin, searchFor);
@@ -99,6 +102,9 @@ void searchContactBySurname(int _contactsNumber, Contact _contacts[]) {
             cout << endl;
         }
     }
+    cout << "(wcisnij enter aby wrocic do menu glownego)";
+    cin.sync();
+    cin.get();
 }
 
 int loadTextFile(Contact _contacts[]) {
@@ -144,62 +150,67 @@ int loadTextFile(Contact _contacts[]) {
     return contactsNumber;
 }
 
+void showMenu () {
+    system("cls");
+    cout << "1. Dodaj adresata"  <<  endl;
+    cout << "2. Wyszukaj po imieniu"  <<  endl;
+    cout << "3. Wyszukaj po nazwisku"  <<  endl;
+    cout << "4. Wyswietl wszystkich adresatow"  <<  endl;
+    cout << "5. Usun adresata"  <<  endl;
+    cout << "6. Edytuj adresata"  <<  endl;
+    cout << "9. Zakoncz program"  <<  endl;
+    cout << endl;
+}
+
 int main() {
     char selection;
-    Contact contacts[1000];
+    Contact contacts[1000]; //tutaj zrobic vector
     int contactsNumber = loadTextFile(contacts);
 
     //MENU GLOWNE
     while (true) {
 
-        system("cls");
-        cout << "KSIAZKA ADRESOWA WERSJA 1.0 - ZAJETE MIEJSCE: " << contactsNumber << "/1000" << endl;
-        cout << "1. Wyswietl wszystkie kontakty"  <<  endl;
-        cout << "2. Dodaj nowy kontakt"  <<  endl;
-        cout << "3. Wyszukaj kontakt"  <<  endl;
-        cout << "9. Wyjscie"  <<  endl;
-        cout << endl;
+        showMenu();
         cin >> selection;
 
         if (selection == '1') {
-            showContacts(contactsNumber, contacts);
-            cout << endl << "(wcisnij enter aby wrocic do menu glownego)";
-            cin.sync();
-            cin.get();
+            system("cls");
+            contactsNumber = addNewContact(contactsNumber, contacts);
         }
 
         else if (selection == '2') {
             system("cls");
-            contactsNumber=addNewContact( contactsNumber, contacts );
-        } else if (selection == '3') {
-            system("cls");
-            cout << "1. Szukaj wg imion"  <<  endl;
-            cout << "2. Szukaj wg nazwisk"  <<  endl;
-            cin >> selection;
-            if (selection == '1') {
-                searchContactByName(contactsNumber, contacts);
-                cout << endl << "(wcisnij enter aby wrocic do menu glownego)";
-                cin.sync();
-                cin.get();
-            } else if (selection == '2') {
-                searchContactBySurname(contactsNumber, contacts);
-                cout << endl << "(wcisnij enter aby wrocic do menu glownego)";
-                cin.sync();
-                cin.get();
-            } else {
-                cout << "Wybrano niepoprawna opcje! Sprobuj ponownie ";
-                system("pause");
-            }
+            searchContactByName(contactsNumber, contacts);
+        }
 
+        else if (selection == '3') {
+            system("cls");
+            searchContactBySurname(contactsNumber, contacts);
+        }
+
+        else if (selection == '4') {
+            system("cls");
+            showContacts(contactsNumber, contacts);
+        }
+
+        else if (selection == '5') {
+            system("cls");
+            //deleteContact();
+        }
+
+        else if (selection == '6') {
+            system("cls");
+            //editContact();
         }
 
         else if (selection == '9') {
             exit(0);
-        } else {
+        }
+
+        else {
             cout << "Wybrano niepoprawna opcje! Sprobuj ponownie ";
             system("pause");
         }
-
     }
     return 0;
 }
