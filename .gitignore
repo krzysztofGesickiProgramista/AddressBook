@@ -1,5 +1,6 @@
 *.cbp
 *.layout
+*.depend
 bin/
 obj/
 addressBook.txt
