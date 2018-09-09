@@ -115,6 +115,10 @@ int loadTextFile(vector <Contact> & _contacts) {
     string textLine;
     textFile.open(fileName.c_str(), ios::in);
     if (textFile.good() == false) {
+        ofstream temp (fileName.c_str());
+    }
+    textFile.open(fileName.c_str(), ios::in);
+    if (textFile.good() == false) {
         cout << "Nie udalo sie otworzyc pliku z Kontaktami!";
         Sleep(2000);
         exit(0);
