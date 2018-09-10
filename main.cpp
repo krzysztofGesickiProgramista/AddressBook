@@ -54,12 +54,12 @@ int addNewContact(int _contactsNumber, vector <Contact> & _contacts) {
         Sleep(2000);
         exit(0);
     }
-    textFile << _contacts[_contactsNumber].id << endl;
-    textFile << _contacts[_contactsNumber].name << endl;
-    textFile << _contacts[_contactsNumber].surname << endl;
-    textFile << _contacts[_contactsNumber].phoneNumber << endl;
-    textFile << _contacts[_contactsNumber].email << endl;
-    textFile << _contacts[_contactsNumber].address << endl;
+    textFile << _contacts[_contactsNumber].id << "|";
+    textFile << _contacts[_contactsNumber].name << "|";
+    textFile << _contacts[_contactsNumber].surname << "|";
+    textFile << _contacts[_contactsNumber].phoneNumber << "|";
+    textFile << _contacts[_contactsNumber].email << "|";
+    textFile << _contacts[_contactsNumber].address << "|" << endl;
     textFile.close();
 
     cout << "Kontakt dodany! ";
@@ -110,50 +110,55 @@ void searchContactBySurname(int _contactsNumber, vector <Contact> _contacts) {
     cin.get();
 }
 
+string explodeStringLine (int position, string _textLine)
+{
+    string singleObject = "";
+    int countPosition = 1;
+    int stringSize = _textLine.size();
+    for (int i = 0; i < stringSize; i++)
+    {
+        if (_textLine[i] == '|')
+        {
+            if (countPosition == position)
+            {
+                return singleObject;
+            }
+            else
+            {
+                countPosition++;
+                singleObject = "";
+            }
+        }
+        else singleObject += _textLine[i];
+    }
+}
+
 int loadTextFile(vector <Contact> & _contacts) {
     fstream textFile;
     string textLine;
+    string idToConvert;
     textFile.open(fileName.c_str(), ios::in);
     if (textFile.good() == false) {
         ofstream temp (fileName.c_str());
-    }
-    textFile.open(fileName.c_str(), ios::in);
-    if (textFile.good() == false) {
-        cout << "Nie udalo sie otworzyc pliku z Kontaktami!";
-        Sleep(2000);
-        exit(0);
+        textFile.open(fileName.c_str(), ios::in);
+        if (textFile.good() == false) {
+            cout << "Nie udalo sie otworzyc pliku z Kontaktami!";
+            Sleep(2000);
+            exit(0);
+        }
     }
     Contact temporaryContact;
     int contactsNumber = 0;
-    int numberOfLine = 1;
-    //teraz wczytujemy z pliku do tablicy
     while (getline(textFile,textLine)) {
-        switch (numberOfLine) {
-        case 1:
-            temporaryContact.id = atoi(textLine.c_str());
-            break;
-        case 2:
-            temporaryContact.name = textLine;
-            break;
-        case 3:
-            temporaryContact.surname = textLine;
-            break;
-        case 4:
-            temporaryContact.phoneNumber = textLine;
-            break;
-        case 5:
-            temporaryContact.email = textLine;
-            break;
-        case 6:
-            temporaryContact.address = textLine;
-            break;
-        }
-        if (numberOfLine == 6) {
-            numberOfLine = 0;
-            contactsNumber++;
-            _contacts.push_back(temporaryContact);
-        }
-        numberOfLine++;
+        idToConvert = explodeStringLine(1, textLine);
+        temporaryContact.id = atoi(idToConvert.c_str());
+        temporaryContact.name = explodeStringLine(2, textLine);
+        temporaryContact.surname = explodeStringLine(3, textLine);
+        temporaryContact.phoneNumber = explodeStringLine(4, textLine);
+        temporaryContact.email = explodeStringLine(5, textLine);
+        temporaryContact.address = explodeStringLine(6, textLine);
+        contactsNumber++;
+        _contacts.push_back(temporaryContact);
     }
     textFile.close();
     return contactsNumber;
@@ -169,6 +174,7 @@ void showMenu () {
     cout << "6. Edytuj adresata"  <<  endl;
     cout << "9. Zakoncz program"  <<  endl;
     cout << endl;
+    cout << "Twoj wybor: ";
 }
 
 int main() {
