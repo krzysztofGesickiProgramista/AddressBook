@@ -3,4 +3,5 @@
 *.depend
 bin/
 obj/
-addressBook.txt
+addresses.txt
+users.txt
