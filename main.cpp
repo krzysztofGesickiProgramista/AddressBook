@@ -491,7 +491,7 @@ int logIn (vector <User> & users, int _usersNumber) {
     int i = 0;
     while (i < _usersNumber) {
         if (users[i].name == name) {
-            for (int attempt = 0; attempt < _usersNumber; attempt++) {
+            for (int attempt = 0; attempt < 3; attempt++) {
                 cout << "Podaj haslo: ";
                 getline(cin, password);
                 if (users[i].password == password) {
